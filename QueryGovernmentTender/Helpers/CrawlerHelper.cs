@@ -13,12 +13,12 @@ namespace QueryGovernmentTender.Helpers
         private const string Home =
            "https://web.pcc.gov.tw/tps/main/pss/pblm/tender/basic/search/mainListCommon.jsp?searchType=basic";
         private const string PostPath = "https://web.pcc.gov.tw/tps/pss/tender.do?searchMode=common&searchType=basic";
-        private const string BidPathBase = "https://web.pcc.gov.tw/tps/pss";
+        private const string TenderPathBase = "https://web.pcc.gov.tw/tps/pss";
         private static readonly HttpClient Client = new HttpClient();
 
-        public async Task<List<BidInfo>> GetAllBidInfo()
+        public async Task<List<TenderInfo>> GetAllTenderInfo()
         {
-            List<BidInfo> infos = new List<BidInfo>();
+            List<TenderInfo> infos = new List<TenderInfo>();
             List<string> allOrgId = GetAllOrgId();
             ConsoleHelper.Print($"共 {allOrgId.Count} 筆機關代碼");
             foreach (string orgId in allOrgId)
@@ -30,7 +30,7 @@ namespace QueryGovernmentTender.Helpers
                 HtmlDocument doc = new HtmlDocument();
                 doc.LoadHtml(htmlContent);
 
-                infos.AddRange(GetBidInformation(doc));
+                infos.AddRange(GetTenderInformation(doc));
                 ConsoleHelper.PrintDivider();
                 ConsoleHelper.Print("等待1秒...");
                 await Task.Delay(1000);
@@ -39,14 +39,14 @@ namespace QueryGovernmentTender.Helpers
             return infos;
         }
 
-        private List<BidInfo> GetBidInformation(HtmlDocument doc)
+        private List<TenderInfo> GetTenderInformation(HtmlDocument doc)
         {
-            List<BidInfo> result = new List<BidInfo>();
+            List<TenderInfo> result = new List<TenderInfo>();
             HtmlNodeCollection rowCollection = doc.DocumentNode.SelectNodes("//tr[@onmouseover]");
 
             if (rowCollection == null)
             {
-                return new List<BidInfo>();
+                return new List<TenderInfo>();
             }
 
             foreach (HtmlNode row in rowCollection)
@@ -57,25 +57,25 @@ namespace QueryGovernmentTender.Helpers
                     continue;
                 }
                 
-                result.Add(new BidInfo
+                result.Add(new TenderInfo
                 {
                     OrgName = row.SelectSingleNode("./td[2]").InnerText.Replace("&nbsp;", string.Empty),
-                    BidId = GetBidId(row.SelectSingleNode("./td[3]").InnerText),
-                    BidName = row.SelectSingleNode("./td[3]/a").Attributes["title"].Value,
+                    TenderId = GetTenderId(row.SelectSingleNode("./td[3]").InnerText),
+                    TenderName = row.SelectSingleNode("./td[3]/a").Attributes["title"].Value,
                     Times = Convert.ToInt32(row.SelectSingleNode("./td[4]/a").Attributes["title"].Value),
-                    BidType = row.SelectSingleNode("./td[5]").InnerText,
+                    TenderType = row.SelectSingleNode("./td[5]").InnerText,
                     BuyType = row.SelectSingleNode("./td[6]").InnerText,
                     AnnounceDate = row.SelectSingleNode("./td[7]").InnerText,
                     EndDate = row.SelectSingleNode("./td[8]").InnerText,
                     Budget = GetBudget(row.SelectSingleNode("./td[9]").InnerText),
-                    Link = $"{BidPathBase}/{row.SelectSingleNode("./td[3]/a").Attributes["href"].Value}",
+                    Link = $"{TenderPathBase}/{row.SelectSingleNode("./td[3]/a").Attributes["href"].Value}",
                 });
             }
             ConsoleHelper.Print($"找到招標公告, 共 {result.Count} 筆");
             return result;
         }
 
-        private static string GetBidId(string innerText)
+        private static string GetTenderId(string innerText)
         {
             innerText = innerText.Split("\r\n", StringSplitOptions.RemoveEmptyEntries)[0];
             innerText = innerText.Trim('\t');

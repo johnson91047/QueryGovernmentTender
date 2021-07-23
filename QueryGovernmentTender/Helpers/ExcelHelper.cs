@@ -16,7 +16,7 @@ namespace QueryGovernmentTender.Helpers
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         }
 
-        public void ExportAllBidInformation(List<BidInfo> bidInformation)
+        public void ExportAllTenderInformation(List<TenderInfo> tenderInformation)
         {
             using ExcelPackage targetExcel = new ExcelPackage(new FileInfo(_savePath));
             string worksheetName = FormattedDate.NowString.Replace("/", "-");
@@ -27,11 +27,11 @@ namespace QueryGovernmentTender.Helpers
             int rowOffset = 1;
 
             ConsoleHelper.PrintDivider();
-            ConsoleHelper.Print($"準備寫入, 共 {bidInformation.Count} 筆");
+            ConsoleHelper.Print($"準備寫入, 共 {tenderInformation.Count} 筆");
             ConsoleHelper.PrintDivider();
-            for(int i = 0 ; i < bidInformation.Count ; i++)
+            for(int i = 0 ; i < tenderInformation.Count ; i++)
             {
-                var valueList = bidInformation[i].ToOrderedValueList();
+                var valueList = tenderInformation[i].ToOrderedValueList();
                 for (int j = 0; j < valueList.Count; j++)
                 {
                     worksheet.SetValue(StartRow + rowOffset, StartColumn + j, valueList[j]);
@@ -51,7 +51,7 @@ namespace QueryGovernmentTender.Helpers
         private static void PrepareHeader(ExcelWorksheet worksheet)
         {
             int columnOffset = 0;
-            foreach (string columnName in BidInfo.ColumnNameList)
+            foreach (string columnName in TenderInfo.ColumnNameList)
             {
                 worksheet.SetValue(StartRow, StartColumn + columnOffset, columnName);
                 columnOffset++;

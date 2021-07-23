@@ -2,13 +2,13 @@
 
 namespace QueryGovernmentTender.Models
 {
-    public class BidInfo
+    public class TenderInfo
     {
         public const string OrgNameColumnName = "機關名稱";
-        public const string BidIdColumnName = "標案案號";
-        public const string BidNameColumnName = "標案名稱";
+        public const string TenderIdColumnName = "標案案號";
+        public const string TenderNameColumnName = "標案名稱";
         public const string TimesColumnName = "傳輸次數";
-        public const string BidTypeColumnName = "招標方式";
+        public const string TenderTypeColumnName = "招標方式";
         public const string BuyTypeColumnName = "採購性質";
         public const string AnnounceDateColumnName = "公告日期";
         public const string EndDateColumnName = "截止投標";
@@ -17,10 +17,10 @@ namespace QueryGovernmentTender.Models
         public static readonly List<string> ColumnNameList = new List<string>
         {
             OrgNameColumnName,
-            BidIdColumnName,
-            BidNameColumnName,
+            TenderIdColumnName,
+            TenderNameColumnName,
             TimesColumnName,
-            BidTypeColumnName,
+            TenderTypeColumnName,
             BuyTypeColumnName,
             AnnounceDateColumnName,
             EndDateColumnName,
@@ -29,10 +29,10 @@ namespace QueryGovernmentTender.Models
         };
 
         public string OrgName { get; set; }
-        public string BidId { get; set; }
-        public string BidName { get; set; }
+        public string TenderId { get; set; }
+        public string TenderName { get; set; }
         public int Times { get; set; }
-        public string BidType { get; set; } 
+        public string TenderType { get; set; } 
         public string BuyType { get; set; }
         public string AnnounceDate { get; set; }
         public string EndDate { get; set; }
@@ -44,10 +44,10 @@ namespace QueryGovernmentTender.Models
             return new List<string>
             {
                 OrgName,
-                BidId,
-                BidName,
+                TenderId,
+                TenderName,
                 Times.ToString(),
-                BidType,
+                TenderType,
                 BuyType,
                 AnnounceDate,
                 EndDate,

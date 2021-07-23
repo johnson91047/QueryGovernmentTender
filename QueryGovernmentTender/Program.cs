@@ -10,7 +10,7 @@ namespace QueryGovernmentTender
     class Program
     {
         private const string DefaultSavePath = ".";
-        private const string DefaultFileName = "GovernmentBid.xlsx";
+        private const string DefaultFileName = "GovernmentTender.xlsx";
         static async Task Main(string[] args)
         {
             string saveFolder = PromptSavePath();
@@ -21,10 +21,10 @@ namespace QueryGovernmentTender
             ConsoleHelper.Print($"輸出到 {Path.GetFullPath(savePath)}");
 
             ConsoleHelper.Print("擷取機關代號...");
-            List<BidInfo> info = await new CrawlerHelper().GetAllBidInfo();
+            List<TenderInfo> info = await new CrawlerHelper().GetAllTenderInfo();
 
             ConsoleHelper.Print("輸出Excel檔案...");
-            new ExcelHelper(savePath).ExportAllBidInformation(info);
+            new ExcelHelper(savePath).ExportAllTenderInformation(info);
 
             ConsoleHelper.Print("按任一按鍵結束...");
             Console.ReadKey();
@@ -35,7 +35,7 @@ namespace QueryGovernmentTender
         {
             while (true)
             {
-                Console.Write(@"輸入儲存Excel檔案名稱 (Enter使用預設""GovernmentBid"") :");
+                Console.Write(@"輸入儲存Excel檔案名稱 (Enter使用預設""GovernmentTender"") :");
                 string fileNameInput = Console.ReadLine();
                 string fileName = DefaultFileName;
                 if (string.IsNullOrEmpty(fileNameInput) || string.IsNullOrWhiteSpace(fileNameInput))
